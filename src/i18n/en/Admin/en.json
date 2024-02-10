@@ -1,0 +1,8 @@
+{
+    "loginForm": {
+      "title": "Login Form",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submitButton": "Login"
+    }
+  }
