@@ -31,12 +31,12 @@
             <Button @click="handleEditProduct(record)">Edit</Button> |
             <Button @click="handleDeleteProduct(record.id)">Delete</Button>
             <ModalComponent
-              title="View Details"
+              title="View  Details"
               v-model:open="isViewModalOpen"
               @ok="handleViewProductOk"
               @cancel="handleViewProductCancel"
               :showFooter="true"
-            >
+            > 
               <ViewProduct
                 :open="isViewModalOpen"
                 :productId="productId"
