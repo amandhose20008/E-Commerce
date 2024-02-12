@@ -28,7 +28,7 @@
         <Table :columns="columns" :dataSource="products" :loading="fetchList === 'LOADING'">
           <template v-slot:action="{ record }">
             <Button @click="handleViewProduct(record)">View Details</Button> |
-            <Button @click="handleEditProduct(record.id)">Edit</Button> |
+            <Button @click="handleEditProduct(record)">Edit</Button> |
             <Button @click="handleDeleteProduct(record.id)">Delete</Button>
             <ModalComponent
               title="View Details"
@@ -53,7 +53,7 @@
             >
               <EditProduct
                 :open="isEditModalOpen"
-                :productId="productId"
+                :productId="productEditId"
                 @ok="handleEditProductOk"
                 @cancel="handleEditProductCancel"
               />
@@ -83,6 +83,7 @@ const fetchState = ref('DEFAULT')
 const isModalOpen = ref(false)
 const isViewModalOpen = ref(false)
 const isEditModalOpen = ref(false)
+const productEditId = ref(false)
 
 const handleProductAdded = async (isSuccess) => {
   if (isSuccess) {
@@ -122,13 +123,14 @@ const handleViewProduct = (record) => {
 
 const handleEditProductCancel = () => {
   isEditModalOpen.value = false
+   productEditId.value = null;
 }
 
 const handleEditProductOk = () => {
   isEditModalOpen.value = false
 }
 const handleEditProduct = (record) => {
-  productId.value = record.id
+  productEditId.value = record.id
   isEditModalOpen.value = true
   console.log('Viewing product:', record)
 }

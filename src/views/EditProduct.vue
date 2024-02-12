@@ -59,7 +59,8 @@
       const id = props.productId
       const response = await ProductService.productViewDetailsService(id)
       console.log("bghjhjh",response.data)
-      formData.value = response.data;
+      const productData = response.data;
+      formData.value = {...productData}
       console.log("jbgsdfg",product.value)
     } catch (err) {
         console.log(err)
