@@ -29,7 +29,6 @@ const APIrequest = async ({
   fileData,
   token = ''
 }) => {
-  console.log('bodydata', bodyData)
   // const apiToken = token !== "" ? token : getLocalStorageToken();
   const apiToken = localStorage.getItem('auth')
 
@@ -107,7 +106,7 @@ const APIrequest = async ({
       delete axiosConfig.headers
     }
 
-    if (apiToken) {
+    if (apiToken){
       axiosConfig.headers = {
         ...axiosConfig.headers,
         authorization: `Bearer ${apiToken}`
@@ -117,6 +116,7 @@ const APIrequest = async ({
     const res = await axios(axiosConfig)
     return res?.data
   } catch (error) {
+    // alert(error?.response?.data?.message)
     //   if (axios.isCancel(error)) {
     //     // logger("API canceled", error);
     //     throw new Error(error);

@@ -15,6 +15,7 @@
   
   <script setup>
   import { ProductService } from '@/services/Admin/Products/index.service'
+import { watch } from 'vue';
   import { onMounted } from 'vue';
   import { ref } from 'vue'
   
@@ -25,6 +26,8 @@
     quantity: '',
     image: null
   })
+
+  const productDetailsFetched = ref(false);
 
   const props = defineProps({
     productId : Number
@@ -47,7 +50,7 @@
       };
     try {
       const response = await ProductService.productEditService(id,editedProductData)
-      console.log('check res', response)
+      console.log('check res', response)  
       return response
     } catch (error) {
       console.error('Error adding product:', error)
@@ -57,16 +60,29 @@
   const getProductDetails = async () => {
     try {
       const id = props.productId
+      console.log('testttttttt',id)
       const response = await ProductService.productViewDetailsService(id)
       console.log("bghjhjh",response.data)
       const productData = response.data;
       formData.value = {...productData}
-      console.log("jbgsdfg",product.value)
+      productDetailsFetched.value = true
     } catch (err) {
-        console.log(err)
+        console.log(err)  
     } 
   };
-  onMounted(getProductDetails)
+  onMounted(() => {
+    if (!productDetailsFetched.value) {
+      getProductDetails(props.productId);
+    }  
+    })
+
+  watch(() => props.productId, (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      getProductDetails(newValue);
+       productDetailsFetched.value = false;
+    }
+  });
+  
   </script>
   
   <style scoped lang="scss">

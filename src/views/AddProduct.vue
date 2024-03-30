@@ -18,6 +18,7 @@ import { ProductService } from '@/services/Admin/Products/index.service'
 import { ref } from 'vue'
 import { boolean } from 'yup';
 
+
 const formData = ref({
   productName: '',
   price: '',
@@ -36,10 +37,8 @@ const file = event.target.files[0];
   }
 };
 const addProduct = async () => {
-  console.log('fgfd', formData.value)
   try {
     const response = await ProductService.addProductService(formData.value)
-    console.log('check res', response)
     // props.open = false
     emit('productAdded',true)
     return response

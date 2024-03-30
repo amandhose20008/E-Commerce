@@ -3,7 +3,6 @@ import Auth from '@/apiEndpoint/Admin/Auth/index'
 
 export const AdminAuthServices = {
   userLogin: async (values) => {
-    console.log(values,"frewf")
     try {
       const payload = {
         ...Auth.accountLogin,
@@ -23,7 +22,6 @@ export const AdminAuthServices = {
         fileData: values
       }
 
-      console.log('paylod', values)
       const res = await APIrequest(payload)
       return res
     } catch (error) {
@@ -54,5 +52,45 @@ export const AdminAuthServices = {
       logger(error)
       throw error
     }
-  }
+  },
+  forgotPassword: async (bodyData, queryParams) => {
+    try {
+      const payload = {
+        ...Auth.forgotPassword,
+        bodyData
+      }
+      const res = await APIrequest(payload)
+      return res
+    } catch (error) {
+      logger(error)
+      throw error
+    }
+  },
+  resetPasswordService: async (bodyData, token) => {
+    try {
+      const payload = {
+        ...Auth.resetPassword,
+        bodyData,
+        formHeaders:{authorization: `Bearer ${token}`}
+      }
+      const res = await APIrequest(payload)
+      return res
+    } catch (error) {
+      logger(error)
+      throw error
+    }
+  },
+  OtpVerificationService: async (bodyData) => {
+    try {
+      const payload = {
+        ...Auth.otpVerify,
+        bodyData,
+      };
+      const res = await APIrequest(payload);
+      return res;
+    } catch (error) {
+      logger(error);
+      throw error;
+    }
+  },
 }

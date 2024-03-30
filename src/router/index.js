@@ -1,32 +1,47 @@
+// import { AdminLayout, UserLayout } from "../layouts";
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue'
+import routess from './generateRoute'
+import stores from '@/stores'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/register',
-      name: 'signup',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/SignUp.vue')  
-    },
-    {
-      path: '/home',
-      name: 'Dashboard',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../Views/Dashboard.vue')  
-    }
-    
-  ]
+  history: createWebHistory(),
+  routes: routess() // Use the exported routes function from the routes file
 })
 
-export default router
+const auth = stores.state.auth
+console.log('checkAUth',auth)
+
+
+
+router.beforeEach((to, from, next) => {
+  // Check if the route requires authentication
+  if (to.meta.auth === true) {
+    // Check if the user is authenticated
+    if (auth?.authStatus) {
+      // Proceed to the route if authenticated
+      next()
+    } else {
+      // Redirect to login if not authenticated
+      next({ name: 'auth.login' })
+    }
+  } else if (to.meta.isFrontend === false && !auth?.isAdmin) {
+    // Check if the route requires admin privileges
+    // Redirect to exception if not admin
+    next({ name: 'route.exception' })
+  } else if (to.name === 'auth.login' && auth.authStatus) {
+    // Redirect to home if already authenticated and trying to access the login page
+    next({ name: 'Home' })
+  } else if (to.meta.access === true && !auth?.isAdmin) {
+    // Check if the route requires admin access and user is not an admin
+    // Redirect to exception or handle as needed
+    next({ name: 'route.exception' })
+  } else {
+    // Proceed to the route for other cases
+    next()
+  }
+})
+
+
+
+
+export default router // Export the router instance

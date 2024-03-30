@@ -1,6 +1,9 @@
 <script setup>
 import { AdminAuthServices } from '@/services/Admin/Auth/index.service'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const formData = ref({
   name: '',
@@ -23,6 +26,8 @@ const signup = async () => {
     const response = await AdminAuthServices.userSignUp(formData.value)
     console.log('>>>>', response)
     if (response.status === true) {
+      localStorage.setItem('email',formData.value.email)
+     router.push('otp-verify')
       alert('Signup successful! You can now login.')
       // Clear form fields
       formData.value.name = ''

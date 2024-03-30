@@ -16,16 +16,18 @@ export const ProductService = {
           throw error;
         }
     },
-    productListService : async (values)=> {
+    productListService : async (queryParams)=> {
       try {
         const payload = {
           ...Product.productList,
-          // bodyData: values,
+          queryParams 
+
         };
         const res = await APIrequest(payload);
         return res;
       } catch (error) {
-        logger(error);
+        console.log(error)
+        // logger(error);
         throw error;
       }
   },
@@ -66,6 +68,45 @@ productDeleteService : async (id)=> {
     logger(error);
     throw error;
   }
-}
+},
+productAddToCartService : async (bodyData)=> {
+  try {
+    const payload = {
+      ...Product.addCart,
+      bodyData
+
+    };
+    const res = await APIrequest(payload);
+    return res;
+  } catch (error) {
+    logger(error);
+    throw error;
+  }
+},
+getCartService : async ()=> {
+  try {
+    const payload = {
+      ...Product.getCart,
+
+    };
+    const res = await APIrequest(payload);
+    return res;
+  } catch (error) {
+    logger(error);
+    throw error;
+  }
+},
+removeCartService : async (id)=> {
+  try {
+    const payload = {
+      ...Product.removeCart(id),
+    };
+    const res = await APIrequest(payload);
+    return res;
+  } catch (error) {
+    logger(error);
+    throw error;
+  }
+},
 
 }

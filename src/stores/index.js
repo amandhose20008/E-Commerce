@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import SecureLS from 'secure-ls'
 import { authModule } from './modules/auth'
+import { productModule } from './modules/product'
 
 var ls = new SecureLS({ isCompression: false })
 export default createStore({
@@ -10,12 +11,13 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    auth: authModule
+    auth: authModule,
+    product: productModule
   },
   plugins: [
     createPersistedState({
-      key: 'JayVueX',
-      paths: ['auth'],
+      key: 'VueX',
+      paths: ['auth','product'],
       storage: {
         getItem: (key) => ls.get(key),
         setItem: (key, value) => ls.set(key, value),

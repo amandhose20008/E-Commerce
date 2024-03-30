@@ -3,11 +3,11 @@
  const Auth = {
 
     accountLogin: {
-    url: `http://localhost:3000/login`,
+    url: `http://localhost:3002/login`,
     method: "POST",
   },
   signUp:{
-    url:'http://localhost:3000/user/signup',
+    url:'http://localhost:3002/user/signup',
     method:'POST'
   },
   updateProfileImage: {
@@ -18,5 +18,17 @@
     url: "/logout", 
     method: "POST",
   },
+  forgotPassword: {
+    url:'http://localhost:3002/user/forget-password',
+    method: 'POST',
+  },
+  resetPassword: {
+    url:'http://localhost:3002/user/reset-password',
+    method: 'POST',
+  },
+  otpVerify: {
+    url:'http://localhost:3002/verify-otp',
+    method: 'POST',
+  }
 }
 export default Auth

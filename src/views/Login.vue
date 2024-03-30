@@ -1,100 +1,133 @@
 <script setup>
 // import { Button } from '@/components/Antd/index.vue';
-import Button from "@/components/Antd/Button/index.ant.vue"
-import AdminFooter from "@/components/AdminFooter/index.vue"
-import InputComponent from '@/components/Form/InputComponent.vue';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import * as yup from 'yup';
-import {AdminAuthServices} from "@/services/Admin/Auth/index.service"
-import { useI18n } from "vue-i18n";
-import stores from "@/stores";
+import Button from '@/components/Antd/Button/index.ant.vue'
+import { Form as VForm } from 'vee-validate'
+import { useRouter } from 'vue-router'
+import * as yup from 'yup'
+import { AdminAuthServices } from '@/services/Admin/Auth/index.service'
+import { useI18n } from 'vue-i18n'
+import stores from '@/stores'
+import TextInput from '@/components/Antd/TextInput.vue'
+import PasswordInput from '@/components/Antd/PasswordInput.vue'
+import moduleRoutesMap from '@/routeControl'
 
+const router = useRouter()
+const { t } = useI18n()
 
-const router = useRouter();
-const { t } = useI18n();
-    const schema = yup.object({
-  email: yup.string().required().email(),
-  password: yup.string().required().min(8),
-});
-    const profile = ref({
-      email: "",
-      password: "",
-    });
-    const loginUser = async () => {
-      try {
-        const response = await AdminAuthServices.userLogin({
-            email:profile.value.email,
-            password: profile.value.password,
-            // userRole: "admin",
-            // deviceType: "web",
-            // appVersion: "v1",
-            // firebaseToken: "",
-          })
-        
+// Define validation schema for the login form
+const validationSchema = yup.object({
+  email: yup.string().required('Email is required!'),
+  password: yup.string().required('Password is required!')
+})
+const loginUser = async (values) => {
+  try {
+    const response = await AdminAuthServices.userLogin(values)
 
-        // Handle success
-        console.log('>>>>',response);
-        const { data } = response;
-        console.log(">>>",data) 
+    // Handle success
+    const { data, access_token } = response
 
-        stores.dispatch('auth/loginUser',{ data: data.data, token:data.access_token})
+    stores.dispatch('auth/loginUser', { data: data, token: access_token })
 
-        localStorage.setItem("auth", response.access_token);
-
-        setTimeout(() => {
-          router.push("/home");
-        }, 1000);
-      } catch (error) {
-        // Handle error
-        console.error(error.response.data.message);
-      }
-    }
-
+    localStorage.setItem('auth', response.access_token)
+    
+    setTimeout(() => {
+      router.push(moduleRoutesMap.user.HOME)
+    }, 1000)
+  } catch (error) {
+    // Handle error
+    console.error(error)
+  }
+}
 </script>
 
 <template>
-<div class="container">
-    <div class="row d-flex justify-content-center align-items-center" style="height: 100vh">
-      <div class="card mb-3" style="max-width: 450px">
-        <div class="col-md-12">
-          <div class="card-body">
-            <h3 class="card-title text-center text-secondary mt-3">{{ t('loginForm.title') }}</h3>
-            <form @submit.prevent="loginUser">
-              <div class="mb-3 mt-4">
-                <label>{{ t('loginForm.emailLabel') }}:</label>
-                <input
-                  class="form-control shadow-none"
-                  v-model="profile.email"
-                  type="email"
-                />
-                <!-- <InputComponent  name="email" label="Email" :schema="schema" inputType="email"/> -->
-              </div>
-              <div class="mb-3">
-                <label>{{ t('loginForm.passwordLabel') }}:</label>
-                <input
-                  type="password"
-                  v-model="profile.password"
-                />
-                <!-- <InputComponent name="password" label="Password" :schema="schema" inputType="password"/> -->
-              </div>
-              <div class="text-center mt-4">
-                <button type="submit">{{ t('loginForm.submitButton') }}</button>
-                <AdminFooter/>
-              
+  <!-- Login Form Section -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-none md:flex md:flex-row md:items-center md:justify-center h-screen"
+  >
+    <!-- Image Column -->
+    <div class="image-col md:w-1/2 h-screen overflow-hidden">
+      <!-- Back Button -->
+      <button
+        @click="navigateToHome"
+        class="absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg"
+      >
+        Back
+      </button>
+      <!-- Image Container -->
+      <div class="image-container h-full flex items-center">
+        <img
+          src="https://res.cloudinary.com/cloudinary-marketing/images/c_fill,w_868/f_auto,q_auto/v1649725962/Web_Assets/blog/GlsMskOvrly_VueJS_223970644e/GlsMskOvrly_VueJS_223970644e-png?_i=AA"
+          alt="Side_Image"
+          class="side-image object-cover h-full w-auto"
+        />
+      </div>
+    </div>
 
-              </div>
-            </form>
-          </div>
+    <!-- Form Column -->
+    <div class="form-col md:w-1/2 overflow-auto">
+      <!-- Login Form Content -->
+      <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <!-- Company Logo -->
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            class="mx-auto h-10 w-auto"
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            alt="Your Company"
+          />
+          <!-- Title -->
+          <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            {{ t('loginTitle') }}
+          </h2>
+        </div>
+
+        <!-- Login Form -->
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <v-form :validationSchema="validationSchema" @submit="loginUser" class="space-y-6">
+            <!-- Username Input -->
+            <div>
+              <TextInput :label="t('emailLabel')" type="email" name="email" required />
+            </div>
+
+            <!-- Password Input -->
+            <div>
+              <PasswordInput :label="t('passwordLabel')" type="password" name="password" required />
+            </div>
+            <div class="text-sm">
+              <router-link
+                to="/forgot-password"
+                class="font float-end my-2 text-indigo-600 hover:text-indigo-500"
+                >{{ t('forgotPassword') }}</router-link
+              >
+            </div>
+            <div class="text-center mt-4">
+              <button
+                type="submit"
+                class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                {{ t('loginForm.submitButton') }}
+              </button>
+            </div>
+          </v-form>
+          <!-- Signup Link -->
+          <p>
+            {{ t('DontHaveAnAccount') }}
+            <router-link
+              to="/signup"
+              class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
+              {{ t('register') }}
+            </router-link>
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss">
+<!-- <style lang="scss">
 .container {
-  height: 100vh;
+  // height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,4 +181,4 @@ const { t } = useI18n();
     }
   }
 }
-</style>
+</style> -->
