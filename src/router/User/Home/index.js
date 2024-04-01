@@ -8,7 +8,7 @@ import CheckoutVue from '@/views/Checkout.vue'
  * @returns {Array} An array containing a route object for the user home page.
  */
 export default function route() {
-  return [
+  return [     
     // User Home Route
     {
       path: routesMap.HOME.path,
