@@ -2,7 +2,7 @@ import routesMap from '@/routeControl/userRouteMap'
 import ForgotPasswordVue from '@/views/ForgotPassword.vue'
 import LoginVue from '@/views/Login.vue'
 // import LandingPage from '@/views/User/LandingPage.vue'
-import ResetPasswordVue from '@/views/ResetPassWord.vue'
+import ResetPassword from '@/views/ResetPassword.vue'
 import SignupVue from '@/views/SignUp.vue'
 import OtpVerifyVue from '@/views/OtpVerify.vue';
 /**
@@ -67,7 +67,7 @@ export default function route() {
         auth: false, // No authentication required
         isFrontend: true // Frontend route
       },
-      component: ResetPasswordVue // Consider customizing the element for the landing page
+      component: ResetPassword // Consider customizing the element for the landing page
     },
     {
       path: routesMap.OTP_VERIFY.path,
