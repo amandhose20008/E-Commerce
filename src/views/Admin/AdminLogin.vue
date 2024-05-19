@@ -1,5 +1,5 @@
 <script setup>
-import Button from '@/components/Antd/Button/index.ant.vue'
+// import Button from '@/components/Antd/Button/index.ant.vue'
 import { Form as VForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
 import * as yup from 'yup'
@@ -79,7 +79,7 @@ const loginUser = async (values) => {
 
         <!-- Login Form -->
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <v-form :validationSchema="validationSchema" @submit="loginUser" class="space-y-6">
+          <v-form :validation-schema="validationSchema" @submit="loginUser" class="space-y-6">
             <!-- Username Input -->
             <div>
               <TextInput :label="t('emailLabel')" type="email" name="email" required />

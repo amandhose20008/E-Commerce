@@ -87,7 +87,7 @@ import { AdminAuthServices } from '@/services/Admin/Auth/index.service'
             //     token
             // }
             const response = await AdminAuthServices.resetPasswordService(bodyData,token)
-            const { message, success } = response
+            const {  success } = response
             if (success) {
                 router.push('/login')
             }
