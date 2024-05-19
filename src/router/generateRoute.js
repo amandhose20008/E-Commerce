@@ -2,7 +2,7 @@
 import NotFoundVue from '@/views/NotFound.vue'
 import { adminRoutes } from './Admin'
 import { userRoutes } from './User'
-import AdminLayout from '@/Layout/Admin/AdminLayout.vue'
+// import AdminLayout from '@/Layout/Admin/AdminLayout.vue'
 
 // Define the routess function to generate routes
 export default function routess() {
